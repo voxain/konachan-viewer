@@ -41,7 +41,11 @@ tags.sort();
 
 
 electron.app.on("ready", () => {
-    let mainWindow = new electron.BrowserWindow();
+    let mainWindow = new electron.BrowserWindow({
+        webPreferences: {
+            experimentalFeatures: true
+        }
+    });
     mainWindow.loadFile("electron/index.html");
     ipcMain.on("main_ready", () => {
         mainWindow.webContents.send("images", images)

@@ -13,6 +13,8 @@ Stop wasting your diskspace and use this little boi here!
 ### What does NOT work?
 * Scanning subdirectories of your special folder.
 * Zooming into images (will come as soon as possible).
+* Filtering by multiple tags (coming soon).
+* Excluding and favorite tags (coming soon).
 * The image overview looks shitty as fuck.
 
 ---
