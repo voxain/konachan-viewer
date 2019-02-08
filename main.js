@@ -10,26 +10,34 @@ let path = config.path;
 
 
 let tags = []
+let images = []
+
+let favorites = (fs.existsSync("favorites.json") ? JSON.parse(fs.readFileSync("favorites.json")) : {images: [], tags: []})
 
 class KonachanImage {
     constructor(filename, cpath){
         this.filename = filename;
         this.path = cpath || path;
         this.id = filename.split(" ")[2];
-        this.tags = filename.replace(".jpg", "").split(" ");
+        this.tags = filename.split(" ");
+        this.size = fs.statSync(this.path + "/" + filename).size / 1e+6;
+        this.tags.pop();
         for(let i = 0; i < 3; i++) this.tags.shift();
+        this.starred = (favorites.images.includes(this.id) ? true : false);
     }
 }
 
 
 let files = fs.readdirSync(path);
 
-files = files.filter(e => e.startsWith("Konachan.com") && !e.endsWith("sample.jpg"));
+files = files.filter(e => e.startsWith("Konachan.com") && !e.includes("sample"));
 
-let images = []
+
+
 
 files.forEach(e => {
-    images.push(new KonachanImage(e))
+    let image = new KonachanImage(e);
+    if(!images.includes(image))images.push(image);
 })
 const scanSubdirs = path => {
     fs.readdirSync(path).forEach(dir => {
@@ -38,7 +46,8 @@ const scanSubdirs = path => {
             scan = scan.filter(e => e.startsWith("Konachan.com") && !e.endsWith("sample.jpg"));
             
             scan.forEach(e => {
-                images.push(new KonachanImage(e, path + "/" + dir))
+                let image = new KonachanImage(e, path + "/" + dir)
+                if(!images.includes(image))images.push(image)
             })
             scanSubdirs(path + "/" + dir)
         }
@@ -54,6 +63,9 @@ images.forEach(e => {
 })
 
 tags.sort();
+images.sort(i => i.id)
+
+
 
 electron.app.on("ready", () => {
     let mainWindow = new electron.BrowserWindow({
@@ -62,8 +74,14 @@ electron.app.on("ready", () => {
         }
     });
     mainWindow.loadFile("electron/index.html");
+
     ipcMain.on("main_ready", () => {
         mainWindow.webContents.send("images", images)
         mainWindow.webContents.send("tags", tags)
+    })
+
+    ipcMain.on("new_favorite", (e, id) => {
+        favorites.images.push(id);
+        fs.writeFileSync("favorites.json", JSON.stringify(favorites))
     })
 })

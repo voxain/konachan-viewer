@@ -3,13 +3,17 @@
     <head>
         <title>Konachan Database</title>
         <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="https://cdn.materialdesignicons.com/3.4.93/css/materialdesignicons.min.css" />
+        <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
         <script src="script.js"></script>
+        <script>if (window.module) module = window.module;</script>
     </head>
     <body onload="load()">
         <div class="tag-list hide" id="tag-list-o">
             <h3><center>AVAILABLE TAGS</center></h3>
             <input id="search" placeholder="Search..." class="search-bar">
             <div class="tag-list-tag" onclick="update_images('all')">ALL</div>
+            <div class="tag-list-tag" onclick="update_images('Favorites', 'starred')"><span class="mdi mdi-star"></span>Favorites</div>
             <section id="tag-list">
 
             </section>
@@ -17,11 +21,15 @@
         <div class="view">
             <div class="view-header">
                 <span id="view-header" style="display: inline-block;">ALL</span>
-                <img class="header-icon" src="images/information-outline.svg">
+                <img id="library_information" class="header-icon" src="images/information-outline.svg">
             </div>
             <div class="view-inner" id="view">
 
             </div>
         </div>
     </body>
+    <footer>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    </footer>
 </html>

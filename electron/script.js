@@ -4,7 +4,6 @@ let images, tags;
 
 
 ipcRenderer.on("tags", (event, e) => {
-    console.log(e)
     e.forEach(t => {
         let listEntry = document.createElement("div");
         listEntry.classList = ["tag-list-tag"];
@@ -16,32 +15,53 @@ ipcRenderer.on("tags", (event, e) => {
 })
 
 ipcRenderer.on("images", (event, e) => {
-    console.log(e)
-    e.forEach(t => {
-        let listEntry = document.createElement("img");
-        listEntry.classList = ["view-image"];
-        listEntry.src = t.path + "/" + t.filename;
-        document.getElementById("view").append(listEntry);
-    })
     images = e;
+    update_images("all")
+
+    $("#library_information").on("click", e => {
+        let size = 0;
+        images.map(i => size+=i.size)
+        alert(`Your library consists of ${images.length} images, blocking ${Math.round(size)}MB of diskspace.`)
+    })
+
 })
 
-ipcRenderer.send("main_ready", true)
 
 
 
-const update_images = tag => {
-    tag = (tag != 'all' ? tag.target.innerHTML : tag)
+const update_images = (tag, p) => {
+    tag = (tag.target ? tag.target.innerHTML : tag)
     let filtered_images = (tag != 'all' ? images.filter(i => i.tags.includes(tag)) : images)
+    if(p) filtered_images = images.filter(i => i[p])
     document.getElementById("view").innerHTML = ""
-    document.getElementById("view-header").innerHTML = tag.toUpperCase().replace("_", " ")
+    document.getElementById("view-header").innerHTML = `(${filtered_images.length}) ` + tag.toUpperCase().replace(/_/g, " ")
 
     filtered_images.forEach(t => {
-        let listEntry = document.createElement("img");
+        let listEntry = document.createElement("div");
+        listEntry.id = t.id;
+        listEntry.setAttribute("style", "background: url('" + t.path + "/" + t.filename + "') no-repeat center") 
         listEntry.classList = ["view-image"];
-        listEntry.src = t.path + "/" + t.filename;
+
+        let textEntry = document.createElement("div");
+        textEntry.classList = ["view-image-text"];
+        textEntry.innerHTML = `<span id='info-${t.id}' class='text-icon mdi mdi-information-outline'></span>` + t.id + `<span id='star-${t.id}' class='text-icon mdi mdi-star${t.starred ? "" : "-outline"}'></span><span class='full-icon mdi mdi-arrow-expand'></span>`;
+
+        listEntry.append(textEntry)
         document.getElementById("view").append(listEntry);
     })
+
+    $(".mdi-star-outline").on("click", e => {
+        $(e.target).toggleClass("mdi-star")
+        $(e.target).toggleClass("mdi-star-outline")
+        images.filter(i => i.id == e.target.id.split("-")[1])[0].starred = !images.filter(i => i.id == e.target.id.split("-")[1])[0].starred;
+        ipcRenderer.send("new_favorite", e.target.id.split("-")[1])
+    })
+
+    $(".mdi-information-outline").on("click", e => {
+        let stats = images.filter(i => i.id == e.target.id.split("-")[1])[0]
+        alert("This images wastes " + stats.size.toFixed(2) + `MB of your diskspace.\n\nPath to this image: ${stats.path}\n\nTags:${stats.tags.map(t => "\n" + t)}`)
+    })
+
 }
 
 const load = () => {
@@ -61,4 +81,7 @@ const load = () => {
             document.getElementById("tag-list").append(listEntry);
         })
     })
+
+    ipcRenderer.send("main_ready", true)
 }
+

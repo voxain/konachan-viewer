@@ -1,8 +1,11 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins');
+
 body, html{
     color: white;
 }
 body, html, input {
-    font-family: Product Sans, Segoe UI, Loma, Arial, sans-serif;
+    font-family:  Poppins, Segoe UI, Loma, Arial, sans-serif;
+    font-size: 15px;
 }
 input:focus{
     outline: none;
@@ -12,7 +15,7 @@ input:focus{
 }
 
 .tag-list{
-    width:30%;
+    width:15em;
     height: 90%;
     border-radius: 20px;
     position: fixed;
@@ -22,20 +25,21 @@ input:focus{
     overflow-x: hidden;
     z-index: 40;
     color:#111;
-    transition: .3s ease;
     box-shadow: 0px 0px 20px rgba(0,0,0,.5);
     border-left: 20px solid yellow;
 }
 .tag-list.unhide{
     left: 3%;
+    transition: .2s cubic-bezier(0.0, 0.0, 0.2, 1);
 }
 .tag-list.hide{
-    left: -35%;
+    left: -17em;
+    transition: .2s cubic-bezier(0.4, 0.0, 1, 1);
 }
 .tag-list-tag{
     width:calc(100% - 30px);
-    height:15px;
-    padding:15px;
+    height:20px;
+    padding:10px;
     transition: .2s ease;
     cursor:pointer;
     border-left: 0px solid yellow;
@@ -47,12 +51,12 @@ input:focus{
 
 .view{
     width:calc(100% - 20px);
-    height: 100%;
+    height:calc(100% - 20px);
     padding:10px;
     position: fixed;
     top: 0;
     right: 0;
-    background: #222;
+    background: #111;
     overflow: scroll;
     overflow-x: hidden;
 }
@@ -67,7 +71,7 @@ input:focus{
     text-align: center;
     margin: 0;
     z-index: 20;
-    box-shadow: 0px 0px 20px #000;
+    box-shadow: 0px 0px 30px #000;
 }
 .header-icon{
     height: 30px;
@@ -82,20 +86,72 @@ input:focus{
 }
 .view-image{
     box-sizing: border-box;
-    border:3px solid #161618;
-    border-bottom-width: 30px;
+    border:3px solid #000;
+    border-top-width: 30px;
+    padding-top:-15px;
+    background: black;
     border-radius: 15px;
+    height:15em;
     width:32%;
     margin-left: 1%;
+    margin-bottom: 1%;
     display: inline-block;
+    transition: .2s ease;
+    background-size: cover !important;
+    text-align: center;
+}
+.view-image-text{
+    border:none; 
+    background:none;
+    margin-top: -30px;
+    font-size: 20px;
+    opacity: 0;
+    transition: .2s ease;
+    text-align: center;
+    background: rgba(0,0,0,.5);
+    position: relative;
+    height:calc(100% + 30px);
+    width:100%;
+}
+.view-image:hover > .view-image-text{
+    opacity: 1;
+}
+.text-icon{
+    float:left;
+    transition: .1s ease;
+    cursor: pointer;
+}
+.text-icon.mdi-star-outline, .text-icon.mdi-star{
+    float:right;
+    transition: .1s ease;
+    cursor: pointer;
+}
+.text-icon.mdi-star-outline:hover, .text-icon.mdi-star:hover{
+    color:yellow;
+}
+.text-icon:hover, .full-icon:hover{
+    color:#2684ff;
+}
+.full-icon{
+    height: 40px;
+    width: 40px;
+
+    font-size:40px;
+    transition: .1s ease;
+    cursor: pointer;
+    margin:auto;top:0;left:0;bottom:0;right:0;
+    position: absolute;
 }
 
 .search-bar{
     width:calc(90% - 20px);
     margin-left: 5%;
     border-radius: 15px;
-    border: 1px solid rgb(221, 221, 221);
+    background: #f3f3f3;
+    border:none;
     padding: 5px;
     padding-left: 15px;
     margin-bottom: 15px;
+    position: sticky;
+    top:10px;
 }
