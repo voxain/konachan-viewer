@@ -30,7 +30,6 @@ ipcRenderer.send("main_ready", true)
 
 
 
-
 const update_images = tag => {
     tag = (tag != 'all' ? tag.target.innerHTML : tag)
     let filtered_images = (tag != 'all' ? images.filter(i => i.tags.includes(tag)) : images)

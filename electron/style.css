@@ -64,9 +64,14 @@ input:focus{
     padding:20px;
     position: fixed;
     top:0;right:0;
+    text-align: center;
     margin: 0;
     z-index: 20;
     box-shadow: 0px 0px 20px #000;
+}
+.header-icon{
+    height: 30px;
+    float: right;
 }
 .view-inner{
     width:100%;
@@ -76,16 +81,20 @@ input:focus{
     z-index: 10;
 }
 .view-image{
+    box-sizing: border-box;
+    border:3px solid #161618;
+    border-bottom-width: 30px;
     border-radius: 15px;
     width:32%;
     margin-left: 1%;
+    display: inline-block;
 }
 
 .search-bar{
     width:calc(90% - 20px);
     margin-left: 5%;
     border-radius: 15px;
-    border: 1px solid gray;
+    border: 1px solid rgb(221, 221, 221);
     padding: 5px;
     padding-left: 15px;
     margin-bottom: 15px;
