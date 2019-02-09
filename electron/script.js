@@ -44,7 +44,7 @@ const update_images = (tag, p) => {
 
         let textEntry = document.createElement("div");
         textEntry.classList = ["view-image-text"];
-        textEntry.innerHTML = `<span id='info-${t.id}' class='text-icon mdi mdi-information-outline'></span>` + t.id + `<span id='star-${t.id}' class='text-icon mdi mdi-star${t.starred ? "" : "-outline"}'></span><span class='full-icon mdi mdi-arrow-expand'></span>`;
+        textEntry.innerHTML = `<span id='info-${t.id}' class='text-icon mdi mdi-information-outline'></span>` + t.id + `<span id='star-${t.id}' class='text-icon mdi mdi-star${t.starred ? "" : "-outline"}'></span><span id='full-${t.id}' class='full-icon mdi mdi-arrow-expand'></span>`;
 
         listEntry.append(textEntry)
         document.getElementById("view").append(listEntry);
@@ -60,6 +60,20 @@ const update_images = (tag, p) => {
     $(".mdi-information-outline").on("click", e => {
         let stats = images.filter(i => i.id == e.target.id.split("-")[1])[0]
         alert("This images wastes " + stats.size.toFixed(2) + `MB of your diskspace.\n\nPath to this image: ${stats.path}\n\nTags:${stats.tags.map(t => "\n" + t)}`)
+    })
+
+    $(".mdi-arrow-expand").on("click", e => {
+        let tag = images.filter(i => i.id == e.target.id.split("-")[1])[0]
+        let fullView = document.createElement("div");
+        fullView.classList = ["full-view"];
+        fullView.setAttribute("style", "background: url('" + tag.path + "/" + tag.filename + "') no-repeat center") 
+        document.body.append(fullView)
+        $(fullView).on("mousemove", e => {
+            fullView.setAttribute("style", `background: url('${ tag.path + "/" + tag.filename }') no-repeat center;background-position: ${50-(window.innerWidth/4-e.clientX/2)/2}% ${50-(window.innerHeight/4-e.clientY/2)/2}%`)
+        })
+        $(fullView).on("click", e => {
+            document.body.removeChild(e.target)
+        })
     })
 
 }
